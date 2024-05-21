@@ -1,0 +1,11 @@
+pyproject.toml
+tests/test_init.py
+wit_project/add.py
+wit_project/checkout.py
+wit_project/commit.py
+wit_project/init.py
+wit_project/status.py
+wit_project.egg-info/PKG-INFO
+wit_project.egg-info/SOURCES.txt
+wit_project.egg-info/dependency_links.txt
+wit_project.egg-info/top_level.txt
