@@ -77,14 +77,14 @@ class Commit:
             current_path = Path.cwd()
         else:
             current_path = Path(path)
-            while current_path != current_path.parent:
-                if len(list(current_path.rglob("*.wit"))) > 0:
-                    relitve_path = current_path / ".wit"
-                    return relitve_path 
-                else:      
-                    current_path = current_path.parent
-            return None
+        while current_path != current_path.parent:
+            if len(list(current_path.rglob("*.wit"))) > 0:
+                relitve_path = current_path / ".wit"
+                return relitve_path 
+            else:      
+                current_path = current_path.parent
+        return None
 
 
 if __name__ == "__main__":
-    Commit().commit(sys.argv[1])
+    Commit(sys.argv[1]).commit()

@@ -19,7 +19,24 @@ def branch(NAME: str) -> None:
         else:
             with open(refrences, "a") as txt:
                 txt.write(f" \n {NAME} = {commit_id}")
+        branches = relitve_path / "branches.txt"
+        with open(branches, "a") as branch:
+            branch.write(f"\n {NAME}")
 
+def get_branches() -> list[str]:
+    relitve_path = is_wit(Path.cwd())
+    branches = relitve_path / "branches.txt"
+    with open(branches, "r") as branch:
+        all_branches = branch.read()
+        all_branches = all_branches.split()
+        return all_branches
+
+def get_activted_branch() -> str:
+    relitve_path = is_wit(Path(r"C:\Users\User\Downloads\week01"))
+    activted = relitve_path / "activted.txt"
+    with open(activted, "r") as activted:
+        activted_branch = activted.read()
+        return  activted_branch
 
 def is_wit(path: os.PathLike) -> None | os.PathLike:   
     current_path = path
@@ -34,3 +51,4 @@ def is_wit(path: os.PathLike) -> None | os.PathLike:
 
 if __name__ == "__main__":
     branch(sys.argv[1])
+

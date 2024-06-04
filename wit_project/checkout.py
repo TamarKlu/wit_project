@@ -3,7 +3,7 @@ import typing
 
 import filecmp
 import os
-import logger
+import logging
 from pathlib import Path
 import shutil
 import sys
@@ -13,7 +13,9 @@ from typing import Tuple
 class Cheackout():
     def __init__(self, commend: str, current_path: os.PathLike | None=None):
         if current_path is None:
-            self.relitve_path = self.is_wit(Path.cwd)
+            self.relitve_path = self.is_wit(Path.cwd(
+
+            ))
         else:
             self.relitve_path = self.is_wit(current_path)
         self.currnt_diroctory = self.relitve_path.parent
@@ -23,20 +25,24 @@ class Cheackout():
         self.brench = None
     
     def which_commend(self) -> Tuple[str, str, str, str]:
+        brench_name = None
+        brench = None
         with open(self.references, "r") as txt:
             txt = txt.read()
-            txt = txt.split(" ")
-            master = txt[6]
+            txt = txt.split()
+            master = txt[5]
             commit_id_ref = txt[2]
             if len(txt) > 6:
                 brench = txt[-1]
-                brench_name = txt[8]           
+                brench_name = txt[6]           
         if self.commend == "commit_id":
             commit_id = commit_id_ref
         elif self.commend == brench_name:
             commit_id = brench
         elif self.commend == "master":
             commit_id = master
+        else:
+            return None
         return (commit_id, master, brench, brench_name)
 
     def checking_before_checkout(self) -> bool | None:
@@ -44,14 +50,17 @@ class Cheackout():
         status1.status()
         Changes_to_be_committed = status1.Changes_to_be_committed
         Changes_not_staged_for_commit = status1.Changes_not_staged_for_commit
-        logger.debag("the file txt will always be in changes to be commited because it will be in the commit file but not in the staging area.") 
+        logging.debug("the file txt will always be in changes to be commited because it will be in the commit file but not in the staging area.") 
         if len(Changes_not_staged_for_commit) == 0 and len(Changes_to_be_committed) == 1 and self.relitve_path is not None:
             return True
             
     def checkout(self) -> None:
-        self.commit_id, self.master, self.brench, self.branch_name = self.which_commend()
+        if self.which_commend() is None:
+            return "wrong commend"
+        else:
+            self.commit_id, self.master, self.brench, self.branch_name = self.which_commend()
         self.commit_path = self.relitve_path / "images" / self.commit_id
-        logger.info("erasing files in the directory")
+        logging.info("erasing files in the directory")
         if self.checking_before_checkout():
             for paths in self.currnt_diroctory.rglob("*"):
                 for copied in self.commit_path.rglob("*"):
@@ -59,13 +68,13 @@ class Cheackout():
                         shutil.rmtree(paths)
                     elif paths.name == copied.name and copied.is_file() and copied.is_file() and ".wit" not in str(paths):
                         os.unlink(paths)
-            logger.info("copying files to directory")
+            logging.info("copying files to directory")
             for copied in self.commit_path.iterdir():
                 if copied.is_dir():
                     shutil.copytree(copied, (str(self.currnt_diroctory) + "\\" + copied.name))
                 else:
                     shutil.copy(copied, self.currnt_diroctory)
-        logger.infe("updating references file and activted file if nececssarry")
+        logging.info("updating references file and activted file if nececssarry")
         self.update()
         
     def update(self) -> None:
@@ -84,7 +93,7 @@ class Cheackout():
             with open(activted, "w") as activted:
                 activted.write("master")
 
-    def is_wit(path: os.PathLike) -> None | os.PathLike:   
+    def is_wit(self, path: os.PathLike) -> None | os.PathLike:   
         current_path = path
         while current_path != current_path.parent:
             if len(list(current_path.rglob("*.wit"))) > 0:
@@ -100,7 +109,7 @@ class Status:
         self.Changes_to_be_committed = []
         self.Untracked_files = [] 
         self.Changes_not_staged_for_commit = [] 
-        self.relitve_path = self.is_wit()
+        self.relitve_path = self.is_wit(Path.cwd())
         self.currnt_diroctory = self.relitve_path.parent
         self.checking_commit_id = commit_id
     
@@ -134,3 +143,4 @@ class Status:
 
 if __name__ == "__main__":
     Cheackout(sys.argv[1]).checkout()
+    

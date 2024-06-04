@@ -1,0 +1,46 @@
+
+body {background-color: rgb(227, 242, 242);
+color:rgb(96, 133, 159); font-size: 20px; 
+margin-left: 20px;
+margin-top:10px;
+background-image: url(animated_tree.jpg);
+background-repeat: no-repeat;
+background-position: bottom right;
+background-size: 60% 100%;
+
+}
+
+a:link {color:rgb(169, 52, 165);
+}
+
+a:hover {color:hotpink}
+
+
+hl {font-size: 3rem;
+    color:rgb(61, 141, 141);
+    padding-left: 700px;
+    
+  }
+
+
+ul {list-style-type: square;
+    margin-top: 20px;
+    font-size: 30px;
+    ;
+}  
+
+li {color:rgb(47, 103, 103); height: 20px;
+margin-top:10px;
+font-size: 60%;
+padding: 10px
+}
+
+form input {background-color:azure;
+    
+}
+
+#activted_branch { a:hover {color:rgb(203, 79, 30);}
+    font-size: 1.5em;
+    font-family: fantasy;
+    font-weight: bold;
+}

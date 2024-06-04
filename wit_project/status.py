@@ -5,15 +5,19 @@ from pathlib import Path
 def status():
     relitve_path = is_wit()
     if relitve_path != "":
-        with open(relitve_path / ".wit" / "references.txt", "r") as txt:
-            txt = txt.read()
-            txt = txt.split(" ")
-            commit_id = txt[2]
-        commit_path = relitve_path / ".wit" / "images" / commit_id
         staging_area = relitve_path / ".wit" /"staging_area"
         Changes_to_be_committed = []
+        if (relitve_path / ".wit" / "references.txt").exists():
+            with open(relitve_path / ".wit" / "references.txt", "r") as txt:
+                txt = txt.read()
+                txt = txt.split(" ")
+                commit_id = txt[2]
+            commit_path = relitve_path / ".wit" / "images" / commit_id
+            for path in staging_area.rglob("*"):
+                if not (commit_path / path.name).exists():
+                    Changes_to_be_committed.append(path.name)
         Untracked_files = []
-        files_in_relitve_path = {file.name for file in relitve_path.rglob("*")}
+        files_in_relitve_path = {file.name for file in relitve_path.rglob("*") if "wit" not in str(file)}
         files_in_staging_area = {file.name for file in staging_area.rglob("*")}
         Untracked_files= list(files_in_relitve_path.difference(files_in_staging_area))
         Changes_not_staged_for_commit = []
@@ -23,10 +27,7 @@ def status():
                     files_changed = filecmp.dircmp(path, copied) 
                     for file in files_changed.diff_files:
                         Changes_not_staged_for_commit.append(file)
-        for path in staging_area.rglob("*"):
-            if not (commit_path / path.name).exists():
-                Changes_to_be_committed.append(path.name)
-        return f"Changes to be committed: {Changes_to_be_committed} \n  Changes not staged for commit: {Changes_not_staged_for_commit} \n Untracked files: {Untracked_files}" 
+            return Changes_to_be_committed ,Changes_not_staged_for_commit ,Untracked_files 
     
     
 def is_wit():

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>wit_project</title>
+  <link  rel="stylesheet" type= "text/css" href="{{url_for('static', filename='style.css')}}">
+</head>
+<hl>branches</hl>
+<body>
+    <form action = "/checkout" method="GET">
+    <ul>    
+    The list of the branches in this wit project: 
+    {% for branch in branches %}
+    {% if branch == activted %}
+    <li >
+        <span id= 'activted_branch'>
+        <a href= "{{url_for ('checkout', specific_branch= branch)}}">{{branch}}</a>
+        </span>
+    </li>
+    {% else %}
+    <li class= 'branch_list'>
+        <a href= "{{url_for ('checkout', specific_branch= branch)}}">{{branch}}</a>
+    </li>
+    {% endif %}
+    {% endfor %}
+    </ul>
+</form>
+</body>
+</html>

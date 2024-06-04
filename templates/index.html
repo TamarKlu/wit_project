@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>wit_project</title>
+  <link  rel="stylesheet" type= "text/css" href="{{url_for('static', filename='style.css')}}">
+</head>
+<body>
+  <span id= image>
+  <hl>wit_project </hl>
+    <ul>
+    {% if len_Changes_not_staged_for_commit > 0 %}
+    Changes_not_staged_for_commit:
+    {% for file in Changes_not_staged_for_commit %}
+      <li>{{file}}</li>
+     {% endfor %}
+    {% endif %}
+    </ul>
+    <ul>
+    {% if len_Untracked_files > 0 %}
+    Untracked_files:
+    {% for file in Untracked_files %} 
+    <li>{{file}}</li>
+    {% endfor %}
+    {% endif %}
+    </ul>
+    <form action = "/add" method="POST">
+      <input type ="file" name="file_to_add">
+      <button type="submit">add</button>
+    </form>
+    <form action = "/commit" method="POST">
+      <input type= "text" name="massage">
+      <button type="submit">commit</button>
+    </form>
+    <a href= "{{url_for ('branches')}}">branches</a>
+  </span>
+</body>
+</html>
